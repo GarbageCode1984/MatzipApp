@@ -14,6 +14,7 @@ import useUserLocation from '@/hooks/useUserLocation';
 import usePermission from '@/hooks/usePermission';
 import mapStyle from '@/style/mapStyle';
 import CustomMarker from '@/components/CustomMarker';
+import useGetMarkers from '@/hooks/queries/useGetMarkers';
 
 type Navigation = CompositeNavigationProp<
     StackNavigationProp<MapStackParamList>,
@@ -26,6 +27,7 @@ function MapHomeScreen() {
     const mapRef = useRef<MapView | null>(null);
     const {userLocation, isUserLocationError} = useUserLocation();
     const [selectLocation, setSelectLocation] = useState<LatLng | null>();
+    const {data: markers = []} = useGetMarkers();
     usePermission('LOCATION');
 
     const handleLongPressMapView = ({nativeEvent}: LongPressEvent) => {
@@ -67,29 +69,9 @@ function MapHomeScreen() {
                 showsMyLocationButton={false}
                 customMapStyle={mapStyle}
                 onLongPress={handleLongPressMapView}>
-                <CustomMarker
-                    color="RED"
-                    coordinate={{
-                        latitude: 37.5516032365118,
-                        longitude: 126.98989626020192,
-                    }}
-                />
-                <CustomMarker
-                    color="BLUE"
-                    score={3}
-                    coordinate={{
-                        latitude: 37.552632365118,
-                        longitude: 126.98989626020192,
-                    }}
-                />
-                <CustomMarker
-                    color="BLUE"
-                    score={1}
-                    coordinate={{
-                        latitude: 37.553632365118,
-                        longitude: 126.98989626020192,
-                    }}
-                />
+                {markers.map(({id, color, score, ...coordinate}) => (
+                    <CustomMarker key={id} color={color} score={score} coordinate={coordinate} />
+                ))}
                 {selectLocation && (
                     <Callout>
                         <Marker coordinate={selectLocation} />
