@@ -38,7 +38,7 @@ function AddPostScreen({route, navigation}: AddPostScreenProps) {
             score,
             imageUris: [],
         };
-
+        console.log('body', body);
         createPost.mutate(
             {address, ...location, ...body},
             {
@@ -51,7 +51,7 @@ function AddPostScreen({route, navigation}: AddPostScreenProps) {
         navigation.setOptions({
             headerRight: () => AddPostHeaderRight(handleSubmit),
         });
-    }, []);
+    });
 
     return (
         <SafeAreaView style={styles.container}>
