@@ -11,9 +11,9 @@ import CustomButton from '@/components/CustomButton';
 import useForm from '@/hooks/useForm';
 import {validateAddPost} from '@/utils';
 import AddPostHeaderRight from '@/components/AddPostHeaderRight';
-import {createPost} from '@/api';
 import useMutateCreatePost from '@/hooks/queries/useMutateCreatePost';
 import {MarkerColor} from '@/types/domain';
+import useGetAddress from '@/hooks/queries/useGetAddress';
 
 type AddPostScreenProps = StackScreenProps<MapStackParamList, typeof mapNavigations.ADD_POST>;
 
@@ -27,7 +27,7 @@ function AddPostScreen({route, navigation}: AddPostScreenProps) {
     });
     const [markerColor, setMarkerColor] = useState<MarkerColor>('RED');
     const [score, setScore] = useState(5);
-    const [address, setAddress] = useState('');
+    const address = useGetAddress(location);
 
     const handleSubmit = () => {
         const body = {
@@ -38,7 +38,6 @@ function AddPostScreen({route, navigation}: AddPostScreenProps) {
             score,
             imageUris: [],
         };
-        console.log('body', body);
         createPost.mutate(
             {address, ...location, ...body},
             {
@@ -46,7 +45,6 @@ function AddPostScreen({route, navigation}: AddPostScreenProps) {
             }
         );
     };
-
     useEffect(() => {
         navigation.setOptions({
             headerRight: () => AddPostHeaderRight(handleSubmit),
@@ -58,7 +56,7 @@ function AddPostScreen({route, navigation}: AddPostScreenProps) {
             <ScrollView style={styles.contentContainer}>
                 <View style={styles.inputContainer}>
                     <InputField
-                        value=""
+                        value={address}
                         disabled
                         icon={<Octicons name="location" size={16} color={colors.GRAY_500} />}
                     />
