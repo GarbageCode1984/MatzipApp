@@ -14,6 +14,7 @@ import AddPostHeaderRight from '@/components/AddPostHeaderRight';
 import useMutateCreatePost from '@/hooks/queries/useMutateCreatePost';
 import {MarkerColor} from '@/types/domain';
 import useGetAddress from '@/hooks/queries/useGetAddress';
+import MarkerSelector from '@/components/MarkerSelector';
 
 type AddPostScreenProps = StackScreenProps<MapStackParamList, typeof mapNavigations.ADD_POST>;
 
@@ -28,6 +29,10 @@ function AddPostScreen({route, navigation}: AddPostScreenProps) {
     const [markerColor, setMarkerColor] = useState<MarkerColor>('RED');
     const [score, setScore] = useState(5);
     const address = useGetAddress(location);
+
+    const handleSelectMarker = (name: MarkerColor) => {
+        setMarkerColor(name);
+    };
 
     const handleSubmit = () => {
         const body = {
@@ -80,6 +85,7 @@ function AddPostScreen({route, navigation}: AddPostScreenProps) {
                     returnKeyType="next"
                     {...addPost.getTextInputProps('description')}
                 />
+                <MarkerSelector markerColor={markerColor} onPressMarker={handleSelectMarker} />
             </ScrollView>
         </SafeAreaView>
     );
