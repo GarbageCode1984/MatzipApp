@@ -1,6 +1,5 @@
 import React from 'react';
-import {Pressable, StyleSheet} from 'react-native';
-import {Text, View} from 'react-native-reanimated/lib/typescript/Animated';
+import {Pressable, StyleSheet, Text, View} from 'react-native';
 import {colors} from '@/constants';
 import {ScrollView} from 'react-native-gesture-handler';
 import {MarkerColor} from '@/types';
@@ -9,11 +8,12 @@ import CustomMarker from './CustomMarker';
 interface MarkerSelectorProps {
     markerColor: MarkerColor;
     onPressMarker: (color: MarkerColor) => void;
+    score?: number;
 }
 
 const categoryList: MarkerColor[] = ['RED', 'YELLOW', 'GREEN', 'BLUE', 'PURPLE'];
 
-function MarkerSelector({markerColor, onPressMarker}: MarkerSelectorProps) {
+function MarkerSelector({markerColor, score = 5, onPressMarker}: MarkerSelectorProps) {
     return (
         <View style={styles.container}>
             <Text style={styles.markerLabel}>마커 선택</Text>
@@ -24,7 +24,7 @@ function MarkerSelector({markerColor, onPressMarker}: MarkerSelectorProps) {
                             <Pressable
                                 style={[styles.markerBox, markerColor === color && styles.pressedMarker]}
                                 onPress={() => onPressMarker(color)}>
-                                <CustomMarker color={color} />
+                                <CustomMarker color={color} score={score} />
                             </Pressable>
                         );
                     })}
