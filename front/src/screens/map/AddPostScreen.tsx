@@ -16,6 +16,7 @@ import {MarkerColor} from '@/types/domain';
 import useGetAddress from '@/hooks/queries/useGetAddress';
 import MarkerSelector from '@/components/MarkerSelector';
 import ScoreInput from '@/components/ScoreInput';
+import DatePickerOption from '@/components/DatePickerOption';
 
 type AddPostScreenProps = StackScreenProps<MapStackParamList, typeof mapNavigations.ADD_POST>;
 
@@ -70,28 +71,29 @@ function AddPostScreen({route, navigation}: AddPostScreenProps) {
                         disabled
                         icon={<Octicons name="location" size={16} color={colors.GRAY_500} />}
                     />
+                    <CustomButton variant="outlined" size="large" label="날짜 선택" />
+                    <InputField
+                        placeholder="제목을 입력하세요."
+                        error={addPost.errors.title}
+                        touched={addPost.touched.title}
+                        returnKeyType="next"
+                        blurOnSubmit={false}
+                        onSubmitEditing={() => descriptionRef.current?.focus()}
+                        {...addPost.getTextInputProps('title')}
+                    />
+                    <InputField
+                        ref={descriptionRef}
+                        placeholder="기록하고 싶은 내용을 입력하세요. (선택)"
+                        error={addPost.errors.description}
+                        touched={addPost.touched.description}
+                        multiline
+                        returnKeyType="next"
+                        {...addPost.getTextInputProps('description')}
+                    />
+                    <MarkerSelector score={score} markerColor={markerColor} onPressMarker={handleSelectMarker} />
+                    <ScoreInput score={score} onChangeScore={handleChangeScore} />
+                    <DatePickerOption date={} />
                 </View>
-                <CustomButton variant="outlined" size="large" label="날짜 선택" />
-                <InputField
-                    placeholder="제목을 입력하세요."
-                    error={addPost.errors.title}
-                    touched={addPost.touched.title}
-                    returnKeyType="next"
-                    blurOnSubmit={false}
-                    onSubmitEditing={() => descriptionRef.current?.focus()}
-                    {...addPost.getTextInputProps('title')}
-                />
-                <InputField
-                    ref={descriptionRef}
-                    placeholder="기록하고 싶은 내용을 입력하세요. (선택)"
-                    error={addPost.errors.description}
-                    touched={addPost.touched.description}
-                    multiline
-                    returnKeyType="next"
-                    {...addPost.getTextInputProps('description')}
-                />
-                <MarkerSelector score={score} markerColor={markerColor} onPressMarker={handleSelectMarker} />
-                <ScoreInput score={score} onChangeScore={handleChangeScore} />
             </ScrollView>
         </SafeAreaView>
     );
