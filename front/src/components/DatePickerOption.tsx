@@ -6,20 +6,22 @@ import DatePicker from 'react-native-date-picker';
 interface DatePickerOptionsProps {
     isVisible: boolean;
     date: Date;
-    onDateChange: (date: Date) => void;
+    onChangeDate: (date: Date) => void;
     onConfirmDate: () => void;
 }
 
-function DatePickerOption({isVisible, date, onDateChange, onConfirmDate}: DatePickerOptionsProps) {
+function DatePickerOption({isVisible, date, onChangeDate, onConfirmDate}: DatePickerOptionsProps) {
     return (
         <Modal visible={isVisible} transparent animationType="slide">
             <SafeAreaView style={styles.optionBackground}>
                 <View style={styles.optionContainer}>
-                    <DatePicker mode="date" theme={'light'} date={date} onDateChange={onDateChange} locale="ko" />
+                    <View style={styles.pickerContainer}>
+                        <DatePicker mode="date" theme={'light'} date={date} onDateChange={onChangeDate} locale="ko" />
+                    </View>
                 </View>
                 <View style={styles.optionContainer}>
                     <Pressable style={styles.optionButton} onPress={onConfirmDate}>
-                        <Text>확인</Text>
+                        <Text style={styles.optionText}>확인</Text>
                     </Pressable>
                 </View>
             </SafeAreaView>
@@ -28,6 +30,9 @@ function DatePickerOption({isVisible, date, onDateChange, onConfirmDate}: DatePi
 }
 
 const styles = StyleSheet.create({
+    pickerContainer: {
+        alignItems: 'center',
+    },
     optionBackground: {
         flex: 1,
         justifyContent: 'center',
@@ -46,6 +51,10 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         height: 50,
         gap: 5,
+    },
+    optionText: {
+        color: colors.BLUE_500,
+        fontSize: 17,
     },
 });
 

@@ -23,6 +23,7 @@ type AddPostScreenProps = StackScreenProps<MapStackParamList, typeof mapNavigati
 function AddPostScreen({route, navigation}: AddPostScreenProps) {
     const {location} = route.params;
     const descriptionRef = useRef<TextInput | null>(null);
+    const address = useGetAddress(location);
     const createPost = useMutateCreatePost();
     const addPost = useForm({
         initialValue: {title: '', description: ''},
@@ -30,7 +31,25 @@ function AddPostScreen({route, navigation}: AddPostScreenProps) {
     });
     const [markerColor, setMarkerColor] = useState<MarkerColor>('RED');
     const [score, setScore] = useState(5);
-    const address = useGetAddress(location);
+    const [date, setDate] = useState(new Date());
+    const [isVisible, setIsVisible] = useState(false);
+    const [isPicked, setIsPicked] = useState(false);
+
+    const show = () => {
+        setIsVisible(true);
+    };
+    const hide = () => {
+        setIsVisible(false);
+    };
+
+    const handleConfirmDate = () => {
+        setIsPicked(true);
+        hide();
+    };
+
+    const handleChangeDate = (pickedDate: Date) => {
+        setDate(pickedDate);
+    };
 
     const handleSelectMarker = (name: MarkerColor) => {
         setMarkerColor(name);
@@ -71,7 +90,7 @@ function AddPostScreen({route, navigation}: AddPostScreenProps) {
                         disabled
                         icon={<Octicons name="location" size={16} color={colors.GRAY_500} />}
                     />
-                    <CustomButton variant="outlined" size="large" label="날짜 선택" />
+                    <CustomButton variant="outlined" size="large" label="날짜 선택" onPress={show} />
                     <InputField
                         placeholder="제목을 입력하세요."
                         error={addPost.errors.title}
@@ -92,7 +111,12 @@ function AddPostScreen({route, navigation}: AddPostScreenProps) {
                     />
                     <MarkerSelector score={score} markerColor={markerColor} onPressMarker={handleSelectMarker} />
                     <ScoreInput score={score} onChangeScore={handleChangeScore} />
-                    <DatePickerOption date={} />
+                    <DatePickerOption
+                        date={date}
+                        isVisible={isVisible}
+                        onChangeDate={handleChangeDate}
+                        onConfirmDate={handleConfirmDate}
+                    />
                 </View>
             </ScrollView>
         </SafeAreaView>
