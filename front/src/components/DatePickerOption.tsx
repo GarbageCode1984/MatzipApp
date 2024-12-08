@@ -10,7 +10,7 @@ interface DatePickerOptionsProps {
     onConfirmDate: () => void;
 }
 
-function DatePickerOption({isVisible, date, onChangeDate, onConfirmDate}: DatePickerOptionsProps) {
+function DatePickerOption({date, isVisible, onChangeDate, onConfirmDate}: DatePickerOptionsProps) {
     return (
         <Modal visible={isVisible} transparent animationType="slide">
             <SafeAreaView style={styles.optionBackground}>
@@ -55,6 +55,7 @@ const styles = StyleSheet.create({
     optionText: {
         color: colors.BLUE_500,
         fontSize: 17,
+        fontWeight: '500',
     },
 });
 

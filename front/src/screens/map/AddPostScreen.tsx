@@ -17,6 +17,8 @@ import useGetAddress from '@/hooks/queries/useGetAddress';
 import MarkerSelector from '@/components/MarkerSelector';
 import ScoreInput from '@/components/ScoreInput';
 import DatePickerOption from '@/components/DatePickerOption';
+import getDateWithSeparator from '@/utils/date';
+import useModal from '@/hooks/useModal';
 
 type AddPostScreenProps = StackScreenProps<MapStackParamList, typeof mapNavigations.ADD_POST>;
 
@@ -32,19 +34,12 @@ function AddPostScreen({route, navigation}: AddPostScreenProps) {
     const [markerColor, setMarkerColor] = useState<MarkerColor>('RED');
     const [score, setScore] = useState(5);
     const [date, setDate] = useState(new Date());
-    const [isVisible, setIsVisible] = useState(false);
     const [isPicked, setIsPicked] = useState(false);
-
-    const show = () => {
-        setIsVisible(true);
-    };
-    const hide = () => {
-        setIsVisible(false);
-    };
+    const dateOption = useModal();
 
     const handleConfirmDate = () => {
         setIsPicked(true);
-        hide();
+        dateOption.hide();
     };
 
     const handleChangeDate = (pickedDate: Date) => {
@@ -61,7 +56,7 @@ function AddPostScreen({route, navigation}: AddPostScreenProps) {
 
     const handleSubmit = () => {
         const body = {
-            date: new Date(),
+            date,
             title: addPost.values.title,
             description: addPost.values.description,
             color: markerColor,
@@ -90,7 +85,12 @@ function AddPostScreen({route, navigation}: AddPostScreenProps) {
                         disabled
                         icon={<Octicons name="location" size={16} color={colors.GRAY_500} />}
                     />
-                    <CustomButton variant="outlined" size="large" label="날짜 선택" onPress={show} />
+                    <CustomButton
+                        variant="outlined"
+                        size="large"
+                        label={isPicked ? getDateWithSeparator(date, '. ') : '날짜 선택'}
+                        onPress={dateOption.show}
+                    />
                     <InputField
                         placeholder="제목을 입력하세요."
                         error={addPost.errors.title}
@@ -113,7 +113,7 @@ function AddPostScreen({route, navigation}: AddPostScreenProps) {
                     <ScoreInput score={score} onChangeScore={handleChangeScore} />
                     <DatePickerOption
                         date={date}
-                        isVisible={isVisible}
+                        isVisible={dateOption.isVisible}
                         onChangeDate={handleChangeDate}
                         onConfirmDate={handleConfirmDate}
                     />

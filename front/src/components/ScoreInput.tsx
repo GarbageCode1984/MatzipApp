@@ -1,8 +1,7 @@
 import {colors} from '@/constants';
 import Slider from '@react-native-community/slider';
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
-import {Text} from 'react-native-reanimated/lib/typescript/Animated';
+import {StyleSheet, Text, View} from 'react-native';
 
 interface ScoreInputProps {
     score: number;
