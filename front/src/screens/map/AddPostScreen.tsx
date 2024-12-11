@@ -20,6 +20,7 @@ import DatePickerOption from '@/components/DatePickerOption';
 import getDateWithSeparator from '@/utils/date';
 import useModal from '@/hooks/useModal';
 import ImageInput from '@/components/ImageInput';
+import usePermission from '@/hooks/usePermission';
 
 type AddPostScreenProps = StackScreenProps<MapStackParamList, typeof mapNavigations.ADD_POST>;
 
@@ -37,6 +38,7 @@ function AddPostScreen({route, navigation}: AddPostScreenProps) {
     const [date, setDate] = useState(new Date());
     const [isPicked, setIsPicked] = useState(false);
     const dateOption = useModal();
+    usePermission('PHOTO');
 
     const handleConfirmDate = () => {
         setIsPicked(true);
