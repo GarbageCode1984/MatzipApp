@@ -1,6 +1,10 @@
+import {getFormDataImages} from '@/utils';
 import ImagePicker from 'react-native-image-crop-picker';
+import useMutateImages from './queries/useMutateImages';
 
 function useImagePicker() {
+    const uploadImages = useMutateImages();
+
     const handleChange = () => {
         ImagePicker.openPicker({
             mediaType: 'photo',
@@ -9,8 +13,10 @@ function useImagePicker() {
             maxFiles: 5,
             cropperChooseText: '완료',
             cropperCancelText: '취소',
-        }).then((items) => {
-            const formData = getFormDataImages(items);
+        }).then((images) => {
+            const formData = getFormDataImages(images);
+
+            uploadImages.mutate(formData);
         });
     };
 }
