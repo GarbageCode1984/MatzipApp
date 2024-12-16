@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {Image, Platform, StyleSheet, Text, View} from 'react-native';
 import {StackScreenProps} from '@react-navigation/stack';
 import {colors, mapNavigations} from '@/constants';
 import {MapStackParamList} from '@/navigations/stack/MapStackNavigator';
@@ -21,6 +21,8 @@ import getDateWithSeparator from '@/utils/date';
 import useModal from '@/hooks/useModal';
 import ImageInput from '@/components/ImageInput';
 import usePermission from '@/hooks/usePermission';
+import useImagePicker from '@/hooks/useImagePicker';
+import PreviewImageList from '@/components/PreviewImageList';
 
 type AddPostScreenProps = StackScreenProps<MapStackParamList, typeof mapNavigations.ADD_POST>;
 
@@ -38,6 +40,10 @@ function AddPostScreen({route, navigation}: AddPostScreenProps) {
     const [date, setDate] = useState(new Date());
     const [isPicked, setIsPicked] = useState(false);
     const dateOption = useModal();
+    const imagePicker = useImagePicker({
+        initialImage: [],
+    });
+
     usePermission('PHOTO');
 
     const handleConfirmDate = () => {
@@ -114,7 +120,11 @@ function AddPostScreen({route, navigation}: AddPostScreenProps) {
                     />
                     <MarkerSelector score={score} markerColor={markerColor} onPressMarker={handleSelectMarker} />
                     <ScoreInput score={score} onChangeScore={handleChangeScore} />
-                    <ImageInput onChange={() => {}} />
+                    <View style={styles.imagesViewer}>
+                        <ImageInput onChange={imagePicker.handleChange} />
+                        <PreviewImageList imageUris={imagePicker.imageUris} />
+                    </View>
+
                     <DatePickerOption
                         date={date}
                         isVisible={dateOption.isVisible}
@@ -139,6 +149,9 @@ const styles = StyleSheet.create({
     inputContainer: {
         gap: 20,
         marginBottom: 20,
+    },
+    imagesViewer: {
+        flexDirection: 'row',
     },
 });
 
