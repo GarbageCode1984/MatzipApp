@@ -18,7 +18,9 @@ function PreviewImageList({imageUris}: PreviewImageListProps) {
                                 key={index}
                                 resizeMode="cover"
                                 source={{
-                                    uri: `${Platform.OS === 'ios' ? 'http://localhost:3030' : 'http://10.0.2.2:3030'}`,
+                                    uri: `${
+                                        Platform.OS === 'ios' ? 'http://localhost:3030' : 'http://10.0.2.2:3030'
+                                    }/${uri}`,
                                 }}
                                 style={styles.image}
                             />
@@ -35,8 +37,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         paddingHorizontal: 15,
         gap: 15,
-        width: 70,
-        height: 70,
     },
     imageContainer: {
         width: 70,
