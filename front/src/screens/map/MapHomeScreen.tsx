@@ -15,6 +15,7 @@ import usePermission from '@/hooks/usePermission';
 import mapStyle from '@/style/mapStyle';
 import CustomMarker from '@/components/CustomMarker';
 import useGetMarkers from '@/hooks/queries/useGetMarkers';
+import MarkerModal from '@/components/MarkerModal';
 
 type Navigation = CompositeNavigationProp<
     StackNavigationProp<MapStackParamList>,
@@ -27,8 +28,22 @@ function MapHomeScreen() {
     const mapRef = useRef<MapView | null>(null);
     const {userLocation, isUserLocationError} = useUserLocation();
     const [selectLocation, setSelectLocation] = useState<LatLng | null>();
+    const [markerId, setMarkerId] = useState<number | null>(null);
     const {data: markers = []} = useGetMarkers();
     usePermission('LOCATION');
+
+    const moveMapView = (coordinate: LatLng) => {
+        mapRef.current?.animateToRegion({
+            ...coordinate,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+        });
+    };
+
+    const handlePressMarker = (id: number, coordinate: LatLng) => {
+        moveMapView(coordinate);
+        setMarkerId(id);
+    };
 
     const handleLongPressMapView = ({nativeEvent}: LongPressEvent) => {
         setSelectLocation(nativeEvent.coordinate);
@@ -50,12 +65,7 @@ function MapHomeScreen() {
             return;
         }
 
-        mapRef.current?.animateToRegion({
-            latitude: userLocation.latitude,
-            longitude: userLocation.longitude,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
-        });
+        moveMapView(userLocation);
     };
 
     return (
@@ -75,7 +85,13 @@ function MapHomeScreen() {
                     longitudeDelta: 0.0421,
                 }}>
                 {markers.map(({id, color, score, ...coordinate}) => (
-                    <CustomMarker key={id} color={color} score={score} coordinate={coordinate} />
+                    <CustomMarker
+                        key={id}
+                        color={color}
+                        score={score}
+                        coordinate={coordinate}
+                        onPress={() => handlePressMarker(id, coordinate)}
+                    />
                 ))}
                 {selectLocation && (
                     <Callout>
@@ -94,6 +110,8 @@ function MapHomeScreen() {
                     <MaterialIcons name="my-location" color={colors.WHITE} size={25} />
                 </Pressable>
             </View>
+
+            <MarkerModal markerId={markerId} />
         </>
     );
 }
