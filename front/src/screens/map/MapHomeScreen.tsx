@@ -16,6 +16,7 @@ import mapStyle from '@/style/mapStyle';
 import CustomMarker from '@/components/CustomMarker';
 import useGetMarkers from '@/hooks/queries/useGetMarkers';
 import MarkerModal from '@/components/MarkerModal';
+import useModal from '@/hooks/useModal';
 
 type Navigation = CompositeNavigationProp<
     StackNavigationProp<MapStackParamList>,
@@ -30,6 +31,7 @@ function MapHomeScreen() {
     const [selectLocation, setSelectLocation] = useState<LatLng | null>();
     const [markerId, setMarkerId] = useState<number | null>(null);
     const {data: markers = []} = useGetMarkers();
+    const markerModal = useModal();
     usePermission('LOCATION');
 
     const moveMapView = (coordinate: LatLng) => {
@@ -43,6 +45,7 @@ function MapHomeScreen() {
     const handlePressMarker = (id: number, coordinate: LatLng) => {
         moveMapView(coordinate);
         setMarkerId(id);
+        markerModal.show();
     };
 
     const handleLongPressMapView = ({nativeEvent}: LongPressEvent) => {
@@ -111,7 +114,7 @@ function MapHomeScreen() {
                 </Pressable>
             </View>
 
-            <MarkerModal markerId={markerId} />
+            <MarkerModal markerId={markerId} isVisible={markerModal.isVisible} hide={markerModal.hide} />
         </>
     );
 }
