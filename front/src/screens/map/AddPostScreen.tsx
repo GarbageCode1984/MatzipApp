@@ -70,7 +70,7 @@ function AddPostScreen({route, navigation}: AddPostScreenProps) {
             description: addPost.values.description,
             color: markerColor,
             score,
-            imageUris: [],
+            imageUris: imagePicker.imageUris,
         };
         createPost.mutate(
             {address, ...location, ...body},
