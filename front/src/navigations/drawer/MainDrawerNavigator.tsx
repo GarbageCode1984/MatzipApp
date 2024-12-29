@@ -22,20 +22,20 @@ function DrawerIcons(route: RouteProp<MainDrawerParamList>, focused: boolean) {
 
     switch (route.name) {
         case mainNavigations.HOME: {
-            iconName: 'location-on';
+            iconName = 'location-on';
             break;
         }
         case mainNavigations.FEED: {
-            iconName: 'book';
+            iconName = 'book';
             break;
         }
         case mainNavigations.CALENDAR: {
-            iconName: 'event-note';
+            iconName = 'event-note';
             break;
         }
     }
 
-    return <MaterialIcons name={iconName} size={18} color={focused ? colors.BLACK : colors.GRAY_500} />;
+    return <MaterialIcons name={iconName} color={focused ? colors.BLACK : colors.GRAY_500} size={18} />;
 }
 
 function MainDrawerNavigator() {
