@@ -13,11 +13,11 @@ import {DrawerNavigationProp} from '@react-navigation/drawer';
 import useUserLocation from '@/hooks/useUserLocation';
 import usePermission from '@/hooks/usePermission';
 import mapStyle from '@/style/mapStyle';
-import CustomMarker from '@/components/CustomMarker';
+import CustomMarker from '@/components/common/CustomMarker';
 import useGetMarkers from '@/hooks/queries/useGetMarkers';
-import MarkerModal from '@/components/MarkerModal';
 import useModal from '@/hooks/useModal';
 import Config from 'react-native-config';
+import MarkerModal from './../../components/map/MarkerModal';
 
 console.log('Config.TEST', Config.TEST);
 

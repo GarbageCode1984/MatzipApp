@@ -3,7 +3,7 @@ import {Pressable, StyleSheet, Text, View} from 'react-native';
 import {colors} from '@/constants';
 import {ScrollView} from 'react-native-gesture-handler';
 import {MarkerColor} from '@/types';
-import CustomMarker from './CustomMarker';
+import CustomMarker from './../common/CustomMarker';
 
 interface MarkerSelectorProps {
     markerColor: MarkerColor;

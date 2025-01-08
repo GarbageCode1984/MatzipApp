@@ -1,8 +1,8 @@
 import React, {ForwardedRef, forwardRef, ReactNode} from 'react';
 import {Dimensions, StyleSheet, Text, TextInput, TextInputProps, View, Pressable} from 'react-native';
-import {colors} from '../constants';
+import {colors} from '@/constants';
 import {useRef} from 'react';
-import {mergeRefs} from '../utils';
+import {mergeRefs} from '@/utils';
 
 interface InputFieldProps extends TextInputProps {
     disabled?: boolean;

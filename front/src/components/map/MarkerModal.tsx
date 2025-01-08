@@ -2,10 +2,10 @@ import {colors} from '@/constants';
 import useGetPost from '@/hooks/queries/useGetPost';
 import React from 'react';
 import {Dimensions, Image, Modal, Platform, Pressable, SafeAreaView, StyleSheet, Text, View} from 'react-native';
-import CustomMarker from './CustomMarker';
 import Octicons from 'react-native-vector-icons/Octicons';
 import getDateWithSeparator from '@/utils/date';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import CustomMarker from './../common/CustomMarker';
 
 interface MarkerModalProps {
     markerId: number | null;
