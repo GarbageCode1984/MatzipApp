@@ -1,11 +1,11 @@
 import {ResponsePost} from '@/api';
 import React from 'react';
 import {Dimensions, Image, Platform, Pressable, StyleSheet, Text, View} from 'react-native';
-import getDateWithSeparator from '@/utils/date';
 import {colors, feedNavigations} from '@/constants';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {FeedStackParamList} from '@/navigations/stack/FeedStackNavigator';
+import {getDateWithSeparator} from '@/utils/date';
 
 interface FeedItemProps {
     post: ResponsePost;

@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {Image, Platform, StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {StackScreenProps} from '@react-navigation/stack';
 import {colors, mapNavigations} from '@/constants';
 import {MapStackParamList} from '@/navigations/stack/MapStackNavigator';
@@ -7,13 +7,12 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {ScrollView, TextInput} from 'react-native-gesture-handler';
 import Octicons from 'react-native-vector-icons/Octicons';
 import useForm from '@/hooks/useForm';
-import {validateAddPost} from '@/utils';
+import {getDateWithSeparator, validateAddPost} from '@/utils';
 import useMutateCreatePost from '@/hooks/queries/useMutateCreatePost';
 import {MarkerColor} from '@/types/domain';
 import useGetAddress from '@/hooks/queries/useGetAddress';
 import ScoreInput from '@/components/post/ScoreInput';
 import DatePickerOption from '@/components/post/DatePickerOption';
-import getDateWithSeparator from '@/utils/date';
 import useModal from '@/hooks/useModal';
 import ImageInput from '@/components/post/ImageInput';
 import usePermission from '@/hooks/usePermission';
@@ -126,6 +125,7 @@ function AddPostScreen({route, navigation}: AddPostScreenProps) {
                             imageUris={imagePicker.imageUris}
                             onDelete={imagePicker.delete}
                             onChangeOrder={imagePicker.changeOrder}
+                            showOptions
                         />
                     </View>
 
