@@ -1,4 +1,4 @@
-import {feedNavigations, colors, colorHex} from '@/constants';
+import {feedNavigations, colors, colorHex, mainNavigations, mapNavigations} from '@/constants';
 import useGetPost from '@/hooks/queries/useGetPost';
 import {FeedStackParamList} from '@/navigations/stack/FeedStackNavigator';
 import {StackScreenProps} from '@react-navigation/stack';
@@ -10,17 +10,34 @@ import {getDateLocaleFormat} from '@/utils';
 import PreviewImageList from '@/components/common/PreviewImageList';
 import CustomButton from '@/components/common/CustomButton';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {CompositeScreenProps} from '@react-navigation/native';
+import {MainDrawerParamList} from '@/navigations/drawer/MainDrawerNavigator';
+import {DrawerScreenProps} from '@react-navigation/drawer';
+import useLocationStore from '@/store/useLocationStore';
 
-type FeedDetailScreenProps = StackScreenProps<FeedStackParamList, typeof feedNavigations.FEED_DETAIL>;
+type FeedDetailScreenProps = CompositeScreenProps<
+    StackScreenProps<FeedStackParamList, typeof feedNavigations.FEED_DETAIL>,
+    DrawerScreenProps<MainDrawerParamList>
+>;
 
 function FeedDetailScreen({route, navigation}: FeedDetailScreenProps) {
     const {id} = route.params;
     const {data: post, isPending, isError} = useGetPost(id);
     const insets = useSafeAreaInsets();
+    const {setMoveLocation} = useLocationStore();
 
     if (isPending || isError) {
         return <></>;
     }
+
+    const handlePressLocation = () => {
+        const {latitude, longitude} = post;
+        setMoveLocation({latitude, longitude});
+
+        navigation.navigate(mainNavigations.HOME, {
+            screen: mapNavigations.MAP_HOME,
+        });
+    };
 
     return (
         <>
@@ -106,7 +123,7 @@ function FeedDetailScreen({route, navigation}: FeedDetailScreenProps) {
                             ]}>
                             <Octicons name="star-fill" size={30} color={colors.GARY_100} />
                         </Pressable>
-                        <CustomButton label="위치보기" size="medium" variant="filled" onPress={() => {}} />
+                        <CustomButton label="위치보기" size="medium" variant="filled" onPress={handlePressLocation} />
                     </View>
                 </View>
             </ScrollView>

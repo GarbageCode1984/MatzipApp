@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {Alert, Pressable, StyleSheet, Text, View} from 'react-native';
 import MapView, {Callout, LatLng, LongPressEvent, Marker, PROVIDER_GOOGLE} from 'react-native-maps';
 import {alerts, colors, mapNavigations} from '@/constants';
@@ -18,6 +18,7 @@ import useGetMarkers from '@/hooks/queries/useGetMarkers';
 import useModal from '@/hooks/useModal';
 import Config from 'react-native-config';
 import MarkerModal from './../../components/map/MarkerModal';
+import useLocationStore from '@/store/useLocationStore';
 
 console.log('Config.TEST', Config.TEST);
 
@@ -34,6 +35,7 @@ function MapHomeScreen() {
     const [selectLocation, setSelectLocation] = useState<LatLng | null>();
     const [markerId, setMarkerId] = useState<number | null>(null);
     const {data: markers = []} = useGetMarkers();
+    const {moveLocation} = useLocationStore();
     const markerModal = useModal();
     usePermission('LOCATION');
 
@@ -73,6 +75,10 @@ function MapHomeScreen() {
 
         moveMapView(userLocation);
     };
+
+    useEffect(() => {
+        moveLocation && moveMapView(moveLocation);
+    }, [moveLocation]);
 
     return (
         <>
