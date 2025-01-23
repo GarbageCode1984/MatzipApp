@@ -19,7 +19,6 @@ type FeedDetailScreenProps = CompositeScreenProps<
     StackScreenProps<FeedStackParamList, typeof feedNavigations.FEED_DETAIL>,
     DrawerScreenProps<MainDrawerParamList>
 >;
-
 function FeedDetailScreen({route, navigation}: FeedDetailScreenProps) {
     const {id} = route.params;
     const {data: post, isPending, isError} = useGetPost(id);
@@ -113,20 +112,17 @@ function FeedDetailScreen({route, navigation}: FeedDetailScreenProps) {
                         <PreviewImageList imageUris={post.images} />
                     </View>
                 )}
-
-                <View style={[styles.bottomContainer, {paddingBottom: insets.bottom}]}>
-                    <View style={[styles.tabContainer, insets.bottom === 0 && styles.tabContainerNoInsets]}>
-                        <Pressable
-                            style={({pressed}) => [
-                                pressed && styles.bookmarkPressedContainer,
-                                styles.bookmarkContainer,
-                            ]}>
-                            <Octicons name="star-fill" size={30} color={colors.GARY_100} />
-                        </Pressable>
-                        <CustomButton label="위치보기" size="medium" variant="filled" onPress={handlePressLocation} />
-                    </View>
-                </View>
             </ScrollView>
+
+            <View style={[styles.bottomContainer, {paddingBottom: insets.bottom}]}>
+                <View style={[styles.tabContainer, insets.bottom === 0 && styles.tabContainerNoInsets]}>
+                    <Pressable
+                        style={({pressed}) => [pressed && styles.bookmarkPressedContainer, styles.bookmarkContainer]}>
+                        <Octicons name="star-fill" size={30} color={colors.GRAY_100} />
+                    </Pressable>
+                    <CustomButton label="위치보기" size="medium" variant="filled" onPress={handlePressLocation} />
+                </View>
+            </View>
         </>
     );
 }
@@ -163,6 +159,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: colors.GRAY_200,
+        borderColor: colors.GRAY_200,
         borderWidth: 1,
     },
     contentsContainer: {
