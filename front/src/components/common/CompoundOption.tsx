@@ -1,7 +1,13 @@
 import {colors} from '@/constants';
-import {Children, PropsWithChildren, ReactNode} from 'react';
-import {PressableProps} from 'react-native';
+import {createContext, PropsWithChildren, ReactNode, useContext} from 'react';
+import {GestureResponderEvent, PressableProps} from 'react-native';
 import {Modal, ModalProps, Pressable, SafeAreaView, StyleSheet, Text, View} from 'react-native';
+
+interface OptionContextValue {
+    onClickOutSide?: (event: GestureResponderEvent) => void;
+}
+
+const OptionContext = createContext<OptionContextValue | undefined>(undefined);
 
 interface OptionMainProps extends ModalProps {
     children: ReactNode;
@@ -11,6 +17,12 @@ interface OptionMainProps extends ModalProps {
 }
 
 function OptionsMain({children, isVisible, hideOption, animationType = 'slide', ...props}: OptionMainProps) {
+    const onClickOutSide = (event: GestureResponderEvent) => {
+        if (event.target === event.currentTarget) {
+            hideOption();
+        }
+    };
+
     return (
         <Modal
             visible={isVisible}
@@ -18,8 +30,18 @@ function OptionsMain({children, isVisible, hideOption, animationType = 'slide', 
             animationType={animationType}
             onRequestClose={hideOption}
             {...props}>
-            <SafeAreaView style={styles.optionBackground}>{children}</SafeAreaView>
+            <OptionContext.Provider value={{onClickOutSide}}>{children}</OptionContext.Provider>
         </Modal>
+    );
+}
+
+function backgorund({children}: PropsWithChildren) {
+    const optionContext = useContext(OptionContext);
+
+    return (
+        <SafeAreaView onTouchEnd={optionContext?.onClickOutSide} style={styles.optionBackground}>
+            {children}
+        </SafeAreaView>
     );
 }
 
@@ -29,7 +51,7 @@ function Container({children}: PropsWithChildren) {
 
 interface ButtonProps extends PressableProps {
     children: ReactNode;
-    isDanger: boolean;
+    isDanger?: boolean;
 }
 
 function Button({children, isDanger = false, ...props}: ButtonProps) {
@@ -47,6 +69,17 @@ function Title({children}: PropsWithChildren) {
         </View>
     );
 }
+function Divider() {
+    return <View style={styles.border} />;
+}
+
+export const CompoundOption = Object.assign(OptionsMain, {
+    Container,
+    backgorund,
+    Button,
+    Title,
+    Divider,
+});
 
 const styles = StyleSheet.create({
     optionBackground: {
@@ -79,6 +112,17 @@ const styles = StyleSheet.create({
     dangerText: {
         color: colors.RED_500,
     },
-    titleContainer: {},
-    titleText: {},
+    titleContainer: {
+        alignItems: 'center',
+        padding: 15,
+    },
+    titleText: {
+        fontSize: 16,
+        fontWeight: '500',
+        color: colors.BLACK,
+    },
+    border: {
+        borderBottomColor: colors.GRAY_200,
+        borderBottomWidth: 1,
+    },
 });

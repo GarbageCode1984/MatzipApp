@@ -14,6 +14,8 @@ import {CompositeScreenProps} from '@react-navigation/native';
 import {MainDrawerParamList} from '@/navigations/drawer/MainDrawerNavigator';
 import {DrawerScreenProps} from '@react-navigation/drawer';
 import useLocationStore from '@/store/useLocationStore';
+import useModal from '@/hooks/useModal';
+import FeedDetailOption from '@/components/feed/FeedDetailOption';
 
 type FeedDetailScreenProps = CompositeScreenProps<
     StackScreenProps<FeedStackParamList, typeof feedNavigations.FEED_DETAIL>,
@@ -24,6 +26,7 @@ function FeedDetailScreen({route, navigation}: FeedDetailScreenProps) {
     const {data: post, isPending, isError} = useGetPost(id);
     const insets = useSafeAreaInsets();
     const {setMoveLocation} = useLocationStore();
+    const detailOption = useModal();
 
     if (isPending || isError) {
         return <></>;
@@ -55,7 +58,7 @@ function FeedDetailScreen({route, navigation}: FeedDetailScreenProps) {
                             color={colors.WHITE}
                             onPress={() => navigation.goBack()}
                         />
-                        <Ionicons name="ellipsis-vertical" size={30} color={colors.WHITE} />
+                        <Ionicons name="ellipsis-vertical" size={30} color={colors.WHITE} onPress={detailOption.show} />
                     </View>
                 </SafeAreaView>
 
@@ -123,6 +126,8 @@ function FeedDetailScreen({route, navigation}: FeedDetailScreenProps) {
                     <CustomButton label="위치보기" size="medium" variant="filled" onPress={handlePressLocation} />
                 </View>
             </View>
+
+            <FeedDetailOption isVisible={detailOption.isVisible} hideOption={detailOption.hide} />
         </>
     );
 }
