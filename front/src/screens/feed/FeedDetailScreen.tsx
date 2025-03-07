@@ -2,7 +2,7 @@ import {feedNavigations, colors, colorHex, mainNavigations, mapNavigations} from
 import useGetPost from '@/hooks/queries/useGetPost';
 import {FeedStackParamList} from '@/navigations/stack/FeedStackNavigator';
 import {StackScreenProps} from '@react-navigation/stack';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Dimensions, Image, Platform, Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View} from 'react-native';
 import Octicons from 'react-native-vector-icons/Octicons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -16,6 +16,7 @@ import {DrawerScreenProps} from '@react-navigation/drawer';
 import useLocationStore from '@/store/useLocationStore';
 import useModal from '@/hooks/useModal';
 import FeedDetailOption from '@/components/feed/FeedDetailOption';
+import useDetailStore from '@/store/useDetailPostStore';
 
 type FeedDetailScreenProps = CompositeScreenProps<
     StackScreenProps<FeedStackParamList, typeof feedNavigations.FEED_DETAIL>,
@@ -27,6 +28,11 @@ function FeedDetailScreen({route, navigation}: FeedDetailScreenProps) {
     const insets = useSafeAreaInsets();
     const {setMoveLocation} = useLocationStore();
     const detailOption = useModal();
+    const {setDetailPost} = useDetailStore();
+
+    useEffect(() => {
+        post && setDetailPost(post);
+    }, [post]);
 
     if (isPending || isError) {
         return <></>;

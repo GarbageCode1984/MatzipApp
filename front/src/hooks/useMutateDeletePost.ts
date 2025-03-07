@@ -1,7 +1,7 @@
 import {deletePost} from '@/api';
 import queryClient from '@/api/queryClient';
 import {queryKeys} from '@/constants';
-import {UseMutationCustomOptions} from '@/types';
+import {Marker, UseMutationCustomOptions} from '@/types';
 import {useMutation} from '@tanstack/react-query';
 
 function useMutateDeletePost(mutationOptions?: UseMutationCustomOptions) {
@@ -15,5 +15,8 @@ function useMutateDeletePost(mutationOptions?: UseMutationCustomOptions) {
                 queryKey: [queryKeys.MARKER, queryKeys.GET_MARKERS],
             });
         },
+        ...mutationOptions,
     });
 }
+
+export default useMutateDeletePost;
