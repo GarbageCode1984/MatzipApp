@@ -21,8 +21,6 @@ import MarkerModal from './../../components/map/MarkerModal';
 import useLocationStore from '@/store/useLocationStore';
 import useMoveMapView from '@/hooks/useMoveMapView';
 
-console.log('Config.TEST', Config.TEST);
-
 type Navigation = CompositeNavigationProp<
     StackNavigationProp<MapStackParamList>,
     DrawerNavigationProp<MainDrawerParamList>
