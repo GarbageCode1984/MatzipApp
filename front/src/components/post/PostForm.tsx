@@ -26,10 +26,11 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {FeedStackParamList} from '@/navigations/stack/FeedStackNavigator';
 
 interface PostFormProps {
+    isEdit?: boolean;
     location: LatLng;
 }
 
-function PostForm({location}: PostFormProps) {
+function PostForm({location, isEdit = false}: PostFormProps) {
     const navigation = useNavigation<StackNavigationProp<FeedStackParamList>>();
     const descriptionRef = useRef<TextInput | null>(null);
     const address = useGetAddress(location);
