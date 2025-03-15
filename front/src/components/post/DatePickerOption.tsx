@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         marginHorizontal: 10,
         marginBottom: 10,
-        backgroundColor: colors.GARY_100,
+        backgroundColor: colors.GRAY_100,
         overflow: 'hidden',
     },
     optionButton: {

@@ -8,7 +8,7 @@ type EditPostScreenProps = StackScreenProps<FeedStackParamList, typeof feedNavig
 function EditPostScreen({route}: EditPostScreenProps) {
     const {location} = route.params;
 
-    return <PostForm location={location} />;
+    return <PostForm location={location} isEdit />;
 }
 
 export default EditPostScreen;

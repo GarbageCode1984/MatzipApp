@@ -24,28 +24,35 @@ import {LatLng} from 'react-native-maps';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {FeedStackParamList} from '@/navigations/stack/FeedStackNavigator';
+import useDetailStore from '@/store/useDetailPostStore';
+import useMutateUpdatePost from '@/hooks/queries/useMutateUpdatePost';
 
 interface PostFormProps {
     isEdit?: boolean;
     location: LatLng;
 }
-
 function PostForm({location, isEdit = false}: PostFormProps) {
     const navigation = useNavigation<StackNavigationProp<FeedStackParamList>>();
     const descriptionRef = useRef<TextInput | null>(null);
     const address = useGetAddress(location);
     const createPost = useMutateCreatePost();
+    const updatePost = useMutateUpdatePost();
+    const {detailPost} = useDetailStore();
+    const isEditMode = isEdit && detailPost;
     const addPost = useForm({
-        initialValue: {title: '', description: ''},
+        initialValue: {
+            title: isEditMode ? detailPost.title : '',
+            description: isEditMode ? detailPost.description : '',
+        },
         validate: validateAddPost,
     });
     const [markerColor, setMarkerColor] = useState<MarkerColor>('RED');
-    const [score, setScore] = useState(5);
-    const [date, setDate] = useState(new Date());
+    const [score, setScore] = useState(isEditMode ? detailPost.score : 5);
+    const [date, setDate] = useState(isEditMode ? new Date(String(detailPost.date)) : new Date());
     const [isPicked, setIsPicked] = useState(false);
     const dateOption = useModal();
     const imagePicker = useImagePicker({
-        initialImage: [],
+        initialImage: isEditMode ? detailPost.images : [],
     });
 
     usePermission('PHOTO');
@@ -76,6 +83,17 @@ function PostForm({location, isEdit = false}: PostFormProps) {
             score,
             imageUris: imagePicker.imageUris,
         };
+
+        if (isEditMode) {
+            updatePost.mutate(
+                {id: detailPost.id, body},
+                {
+                    onSuccess: () => navigation.goBack(),
+                }
+            );
+            return;
+        }
+
         createPost.mutate(
             {address, ...location, ...body},
             {
@@ -102,7 +120,7 @@ function PostForm({location, isEdit = false}: PostFormProps) {
                     <CustomButton
                         variant="outlined"
                         size="large"
-                        label={isPicked ? getDateWithSeparator(date, '. ') : '날짜 선택'}
+                        label={isPicked || isEdit ? getDateWithSeparator(date, '. ') : '날짜 선택'}
                         onPress={dateOption.show}
                     />
                     <InputField
