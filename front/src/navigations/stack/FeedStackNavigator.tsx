@@ -11,6 +11,7 @@ export type FeedStackParamList = {
     [feedNavigations.FEED_HOME]: undefined;
     [feedNavigations.FEED_DETAIL]: {id: number};
     [feedNavigations.EDIT_POST]: {location: LatLng};
+    [feedNavigations.IMAGE_ZOOM]: {index: number};
 };
 
 const Stack = createStackNavigator<FeedStackParamList>();
