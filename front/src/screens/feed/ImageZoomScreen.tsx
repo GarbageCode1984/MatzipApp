@@ -4,7 +4,6 @@ import {FeedStackParamList} from '@/navigations/stack/FeedStackNavigator';
 import useDetailStore from '@/store/useDetailPostStore';
 import {StackScreenProps} from '@react-navigation/stack';
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
 
 type ImageZoomScreenProps = StackScreenProps<FeedStackParamList, typeof feedNavigations.IMAGE_ZOOM>;
 
@@ -14,7 +13,5 @@ function ImageZoomScreen({route}: ImageZoomScreenProps) {
 
     return <ImageCarousel images={detailPost?.images ?? []} />;
 }
-
-const styles = StyleSheet.create({});
 
 export default ImageZoomScreen;

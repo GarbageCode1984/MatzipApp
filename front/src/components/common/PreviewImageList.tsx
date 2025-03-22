@@ -10,9 +10,21 @@ interface PreviewImageListProps {
     onDelete?: (uri: string) => void;
     onChangeOrder?: (fromIndex: number, toIndex: number) => void;
     showOptions?: boolean;
+    zoomEnable?: boolean;
 }
 
-function PreviewImageList({imageUris, onDelete, onChangeOrder, showOptions = false}: PreviewImageListProps) {
+function PreviewImageList({
+    imageUris,
+    onDelete,
+    onChangeOrder,
+    showOptions = false,
+    zoomEnable = false,
+}: PreviewImageListProps) {
+    const handlePressImage = () => {
+        if (zoomEnable) {
+        }
+    };
+
     return (
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             <View style={styles.container}>
