@@ -1,9 +1,8 @@
 import {colors} from '@/constants';
 import {ImageUri} from '@/types';
 import React from 'react';
-import {Dimensions, Platform, StyleSheet, View} from 'react-native';
+import {Dimensions, Image, Platform, StyleSheet, View} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
-import {Image} from 'react-native-reanimated/lib/typescript/Animated';
 
 interface ImageCarouselProps {
     images: ImageUri[];
@@ -21,10 +20,11 @@ function ImageCarousel({images}: ImageCarouselProps) {
                         <Image
                             style={styles.image}
                             source={{
-                                uri: `${Platform.OS === 'ios' ? 'http://localhost:3030' : 'http://10.0.2.2:3030'}/${
+                                uri: `${Platform.OS === 'ios' ? 'http://localhost:3030/' : 'http://10.0.2.2:3030/'}/${
                                     item.uri
                                 }`,
                             }}
+                            resizeMode="contain"
                         />
                     </View>
                 )}

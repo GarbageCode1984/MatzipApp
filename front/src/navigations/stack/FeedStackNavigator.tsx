@@ -59,7 +59,7 @@ function FeedStackNavigator() {
                 options={{
                     headerTitle: '장소 수정',
                 }}
-            />{' '}
+            />
             <Stack.Screen
                 name={feedNavigations.IMAGE_ZOOM}
                 component={ImageZoomScreen}

@@ -1,5 +1,7 @@
-import {colors} from '@/constants';
+import {colors, feedNavigations} from '@/constants';
+import {FeedStackParamList} from '@/navigations/stack/FeedStackNavigator';
 import {ImageUri} from '@/types';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {Image, Platform, StyleSheet, View} from 'react-native';
 import {Pressable, ScrollView} from 'react-native-gesture-handler';
@@ -20,17 +22,20 @@ function PreviewImageList({
     showOptions = false,
     zoomEnable = false,
 }: PreviewImageListProps) {
-    const handlePressImage = () => {
+    const navigation = useNavigation<NavigationProp<FeedStackParamList>>();
+
+    /*    const handlePressImage = (index: number) => {
         if (zoomEnable) {
+            navigation.navigate(feedNavigations.IMAGE_ZOOM, {index});
         }
-    };
+    }; */
 
     return (
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             <View style={styles.container}>
                 {imageUris.map(({uri}, index) => {
                     return (
-                        <Pressable style={styles.imageContainer}>
+                        <Pressable /* onPress={() => handlePressImage(index)} */ style={styles.imageContainer}>
                             <Image
                                 key={index}
                                 resizeMode="cover"
