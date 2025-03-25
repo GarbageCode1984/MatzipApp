@@ -1,18 +1,46 @@
 import {colors} from '@/constants';
 import {ImageUri} from '@/types';
-import React from 'react';
-import {Dimensions, Image, Platform, StyleSheet, View} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+import React, {useState} from 'react';
+import {
+    Dimensions,
+    Image,
+    NativeScrollEvent,
+    NativeSyntheticEvent,
+    Platform,
+    Pressable,
+    StyleSheet,
+    View,
+} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import Octicons from 'react-native-vector-icons/Octicons';
 
 interface ImageCarouselProps {
     images: ImageUri[];
+    pressedIndex?: number;
 }
 
 const deviceWidth = Dimensions.get('window').width;
 
-function ImageCarousel({images}: ImageCarouselProps) {
+function ImageCarousel({images, pressedIndex = 0}: ImageCarouselProps) {
+    const insets = useSafeAreaInsets();
+    const navigation = useNavigation();
+    const [initialIndex, setInitialIndex] = useState(pressedIndex);
+    const [page, setPage] = useState(pressedIndex);
+
+    const handleScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+        const newPage = Math.round(e.nativeEvent.contentOffset.x / deviceWidth);
+
+        setPage(newPage);
+    };
+
     return (
         <View style={styles.container}>
+            <Pressable style={[styles.backButton, {marginTop: insets.top + 10}]} onPress={() => navigation.goBack()}>
+                <Octicons name="arrow-left" size={30} color={colors.WHITE} />
+            </Pressable>
+
             <FlatList
                 data={images}
                 renderItem={({item}) => (
@@ -29,10 +57,26 @@ function ImageCarousel({images}: ImageCarouselProps) {
                     </View>
                 )}
                 keyExtractor={(item) => String(item.id)}
+                onScroll={handleScroll}
                 horizontal
                 pagingEnabled
                 showsHorizontalScrollIndicator={false}
+                initialScrollIndex={initialIndex}
+                onScrollToIndexFailed={() => {
+                    setInitialIndex(0);
+                }}
+                getItemLayout={(_, index) => ({
+                    length: deviceWidth,
+                    offset: deviceWidth * index,
+                    index,
+                })}
             />
+
+            <View style={[styles.pageContainer, {bottom: insets.bottom + 10}]}>
+                {Array.from({length: images.length}, (_, index) => (
+                    <View key={index} style={[styles.pageDot, index === page && styles.currentPageDot]} />
+                ))}
+            </View>
         </View>
     );
 }
@@ -43,9 +87,35 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: colors.WHITE,
     },
+    backButton: {
+        position: 'absolute',
+        left: 20,
+        zIndex: 1,
+        backgroundColor: colors.PINK_700,
+        height: 40,
+        width: 40,
+        borderRadius: 40,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
     image: {
         width: '100%',
         height: '100%',
+    },
+    pageContainer: {
+        flexDirection: 'row',
+        position: 'absolute',
+        alignItems: 'center',
+    },
+    pageDot: {
+        margin: 4,
+        backgroundColor: colors.GRAY_200,
+        width: 8,
+        height: 8,
+        borderRadius: 4,
+    },
+    currentPageDot: {
+        backgroundColor: colors.PINK_700,
     },
 });
 

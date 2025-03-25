@@ -24,18 +24,18 @@ function PreviewImageList({
 }: PreviewImageListProps) {
     const navigation = useNavigation<NavigationProp<FeedStackParamList>>();
 
-    /*    const handlePressImage = (index: number) => {
+    const handlePressImage = (index: number) => {
         if (zoomEnable) {
             navigation.navigate(feedNavigations.IMAGE_ZOOM, {index});
         }
-    }; */
+    };
 
     return (
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             <View style={styles.container}>
                 {imageUris.map(({uri}, index) => {
                     return (
-                        <Pressable /* onPress={() => handlePressImage(index)} */ style={styles.imageContainer}>
+                        <Pressable onPress={() => handlePressImage(index)} style={styles.imageContainer}>
                             <Image
                                 key={index}
                                 resizeMode="cover"
